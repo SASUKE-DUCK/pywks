@@ -762,3 +762,24 @@ class KeyExtractor:
         wvdecrypt.update_license(license_b64)
         keys = wvdecrypt.start_process()
         return keys
+
+class DataExtractor_DSNP:
+    def __init__(self, content):
+        self.content = content
+
+    def extract_base64_by_choice(self, choice):
+        if self.content:
+            matches = [(match[0], re.search(r'base64,(.*)', match[1]).group(1)) for match in re.findall(r'KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed",KEYFORMATVERSIONS="[^"]+",CHARACTERISTICS="([^"]+)",URI="([^"]+)"', self.content)]
+            if matches:
+                if 1 <= choice <= len(matches):
+                    characteristics, base64_data = matches[choice - 1]
+                    return characteristics, base64_data
+                else:
+                    return None, None
+        return None, None
+
+    def get_characteristics_list(self):
+        if self.content:
+            matches = [(match[0], re.search(r'base64,(.*)', match[1]).group(1)) for match in re.findall(r'KEYFORMAT="urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed",KEYFORMATVERSIONS="[^"]+",CHARACTERISTICS="([^"]+)",URI="([^"]+)"', self.content)]
+            return matches
+        return []
