@@ -1,5 +1,5 @@
 # pywks 
-This script will obtain keys to decrypt the encrypted videos.}
+This script will obtain keys to decrypt the encrypted videos.
 
 > **Warning**
 >
