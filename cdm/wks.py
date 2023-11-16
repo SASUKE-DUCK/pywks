@@ -26,6 +26,7 @@ from Cryptodome.PublicKey import RSA
 from Cryptodome.Signature import pss
 from Cryptodome.Util import Padding
 import logging
+from bs4 import BeautifulSoup
 
 _sym_db = _symbol_database.Default()
 
@@ -856,3 +857,28 @@ def parse_manifest_ism(manifest_url):
     encoded_string = base64.b64encode(bytes.fromhex(array_of_bytes.hex())).decode("utf-8")
 
     return kid, stream_info_list, encoded_string
+
+def get_keys_license_cdrm_project(license_url, headers_license, pssh_value):
+    formatted_headers = '\n'.join([f'{key}: "{value}"' for key, value in headers_license.items()])
+
+    json_data = {
+        'license': license_url,
+        'headers': formatted_headers,
+        'pssh': pssh_value,
+        'buildInfo': '',
+        'proxy': '',
+        'cache': False,
+    }
+
+    response = requests.post('https://cdrm-project.com/wv', json=json_data)
+    return response
+
+def print_keys_cdrm_project(response):
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        li_elements = soup.find('ol').find_all('li')
+        for li in li_elements:
+            key = li.get_text(strip=True)
+            print(f'KEY: {key}')
+    else:
+        print(f"Error: {response.status_code}")
