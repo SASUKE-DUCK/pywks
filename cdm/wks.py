@@ -873,6 +873,11 @@ def get_keys_license_cdrm_project(license_url, headers_license, pssh_value):
     response = requests.post('https://cdrm-project.com/wv', json=json_data)
     return response
 
+def get_keys_cache_cdrm_project(pssh_value):
+    data = pssh_value
+    response = requests.post('https://cdrm-project.com/findpssh', data=data)
+    print_keys_cdrm_project(response)
+    
 def print_keys_cdrm_project(response):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
