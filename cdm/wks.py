@@ -887,3 +887,14 @@ def print_keys_cdrm_project(response):
             print(f'KEY: {key}')
     else:
         print(f"Error: {response.status_code}")
+
+def extract_pssh_m3u8(content):
+    # Use regular expression to extract the Base64-encoded PSSH value
+    pssh_match = re.search(r'URI="data:text/plain;base64,([^"]+)"', content)
+
+    if pssh_match:
+        pssh_base64 = pssh_match.group(1)
+        return pssh_base64
+
+    # If the regex match fails, return None or raise an exception as needed
+    return None
