@@ -829,3 +829,14 @@ def extract_pssh_m3u8(content):
 
     # If the regex match fails, return None or raise an exception as needed
     return None
+
+def get_keys_cdrm_api(headers_license, license_url, pssh_value):
+    api_url = "https://cdrm-project.com/api"
+    
+    r = requests.post(api_url, headers=headers_license, json={"license": license_url, "pssh": pssh_value})
+    data = r.json()
+
+    # Extract keys from the response
+    keys = [key["key"] for key in data.get("keys", [])]
+
+    return keys
