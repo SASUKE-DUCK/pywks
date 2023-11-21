@@ -1,0 +1,6 @@
+requests
+xmltodict
+pyperclip
+protobuf==3.19.5
+pycryptodome
+pycryptodomex
